@@ -378,12 +378,12 @@ static void *
 get_data (void *         var,
 	  Filedata *     filedata,
 	  unsigned long  offset,
-	  bfd_size_type  size,
-	  bfd_size_type  nmemb,
+	  bfd_size_type  size, //it refers to the size of each entry 
+	  bfd_size_type  nmemb , //it refers to the number of entries. 
 	  const char *   reason)
 {
   void * mvar;
-  bfd_size_type amt = size * nmemb;
+  bfd_size_type amt = size * nmemb; //it calculates the total number of program header size.
 
   if (size == 0 || nmemb == 0)
     return NULL;
@@ -436,6 +436,7 @@ get_data (void *         var,
   if (mvar == NULL)
     {
       /* + 1 so that we can '\0' terminate invalid string table sections.  */
+	//it allocates the exact number of bytes for program header size  
       mvar = malloc ((size_t) amt + 1);
 
       if (mvar == NULL)
@@ -448,7 +449,9 @@ get_data (void *         var,
 
       ((char *) mvar)[amt] = '\0';
     }
-
+/* it reads certain number of bytes which will be exactly the same size as prog header
+   and then it stores them in mvar
+*/
   if (fread (mvar, (size_t) size, (size_t) nmemb, filedata->handle) != nmemb)
     {
       if (reason)
