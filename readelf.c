@@ -5024,10 +5024,17 @@ static bfd_boolean
 get_64bit_program_headers (Filedata * filedata, Elf_Internal_Phdr * pheaders)
 {
   Elf64_External_Phdr * phdrs;
+ /*this refers to the external program header which shall be read from filedata
+ the attributes of rhis type  is of char array */
   Elf64_External_Phdr * external;
+/*this refers to the internal struct designated for program header
+the attributes of rhis type type is of bfd_vma
+*/
   Elf_Internal_Phdr *   internal;
   unsigned int i;
+// size refers to the size of each program header entry
   unsigned int size = filedata->file_header.e_phentsize;
+// num refers to the number of program header.
   unsigned int num  = filedata->file_header.e_phnum;
 
   /* PR binutils/17531: Cope with unexpected section header sizes.  */
@@ -5040,12 +5047,14 @@ get_64bit_program_headers (Filedata * filedata, Elf_Internal_Phdr * pheaders)
     }
   if (size > sizeof * phdrs)
     warn (_("The e_phentsize field in the ELF header is larger than the size of an ELF program header\n"));
-
+//this gets the data which already existed inside filedata and stores it in phdrs
   phdrs = (Elf64_External_Phdr *) get_data (NULL, filedata, filedata->file_header.e_phoff,
                                             size, num, _("program headers"));
   if (!phdrs)
     return FALSE;
-
+/*this loops over the number of entries, and for each entry it stores the corrosponding 
+arrtibutes inside the internal struct.
+*/
   for (i = 0, internal = pheaders, external = phdrs;
        i < filedata->file_header.e_phnum;
        i++, internal++, external++)
