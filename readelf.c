@@ -5069,9 +5069,11 @@ get_64bit_program_headers (Filedata * filedata, Elf_Internal_Phdr * pheaders)
 static bfd_boolean
 get_program_headers (Filedata * filedata)
 {
+ // this is to store what will be read from elf file into an internal struct
   Elf_Internal_Phdr * phdrs;
 
   /* Check cache of prior read.  */
+  //checks if it there is already program header loaded or not
   if (filedata->program_headers != NULL)
     return TRUE;
 
